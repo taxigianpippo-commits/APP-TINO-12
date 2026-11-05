@@ -1,161 +1,228 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><title>L'APP - TINO</title><style>*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#0f1115;color:#e5e7eb;padding-bottom:120px}header{position:sticky;top:0;z-index:10;background:#0f1115ee;backdrop-filter:blur(10px);border-bottom:1px solid #222;padding:10px}button{border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}input,select,textarea{width:100%;background:#171a23;border:1px solid #333;color:#fff;border-radius:10px;padding:10px;margin-top:4px}label{font-size:12px;color:#9aa3b2;margin-top:8px;display:block;font-weight:600}.y{background:#facc15;color:#000;font-size:16px;padding:16px}.g{background:#22c55e;color:#000}.b{background:#06b6d4;color:#000}.d{background:#1e222e;color:#fff;border:1px solid #333}.s{background:#2a2e3e;color:#fff;border:1px solid #3a3f55;padding:7px 12px;font-size:12px}.c{background:#8b5cf6;color:#fff}.fb{background:#1877F2;color:#fff}.excel{background:#107C41;color:#fff}.tabs{display:flex;gap:8px;margin-top:8px}.tab{flex:1;padding:10px;border-radius:12px;text-align:center;font-weight:800;line-height:1.2;font-size:12px}.tab.a{background:#facc15;color:#000}.tab.i{background:#1e222e;color:#777}.card{background:#1a1d27;border:1px solid #2a2d3a;border-radius:16px;padding:12px;margin:10px}.badge{background:#facc15;color:#000;border-radius:20px;padding:2px 8px;font-weight:800;font-size:11px}.badge.ok{background:#22c55e}.badge.new{background:#facc15}.badge.sold{background:#ef4444;color:#fff}.badge.plat{background:#3b82f6;color:#fff}.badge.ship{background:#f59e0b;color:#000}.thumbs{display:flex;gap:6px;overflow:auto;margin-top:6px}.th{position:relative;flex:0 0 70px}.th img{width:70px;height:70px;object-fit:cover;border-radius:8px}.th b{position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:12px}#m{position:fixed;inset:0;background:#0009;display:none;z-index:99;align-items:flex-end;justify-content:center}#m.o{display:flex}.sh{background:#13151d;border-radius:18px 18px 0 0;width:100%;max-width:640px;max-height:92vh;overflow:auto;padding:16px}.hidden{display:none!important}#backupPanel{position:fixed;inset:0;background:#000d;z-index:99999;display:none;align-items:center;justify-content:center;padding:16px}#backupPanel.on{display:flex}.inner{background:#1e222e;border:1px solid #333;border-radius:16px;padding:16px;width:100%;max-width:600px;max-height:90vh;overflow:auto}.bigBtn{width:100%;display:block;margin-top:8px}.row3{display:flex;gap:5px;margin-top:6px}.row3 button{flex:1;padding:6px 8px;font-size:11px;border-radius:8px}#sellModal{position:fixed;inset:0;background:#000c;z-index:100001;display:none;align-items:center;justify-content:center;padding:20px}#sellModal.on{display:flex}.sellBox{background:#1e222e;border:2px solid #facc15;border-radius:16px;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow:auto}.top-small{font-size:11px!important;padding:6px 8px!important}
-#wizardModal{position:fixed;inset:0;background:#0f1115;z-index:100002;display:none;flex-direction:column}#wizardModal.on{display:flex}.wizHeader{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid #222}.wizBar{height:6px;background:#1e222e}.wizBar i{display:block;height:100%;background:#facc15;transition:width .3s}.wizBody{flex:1;display:flex;flex-direction:column;overflow:auto;padding:16px;padding-bottom:90px}.wizStep{display:none;flex:1;flex-direction:column}.wizStep.on{display:flex}.wizPosBtn{width:100%;padding:18px;margin-top:8px;font-size:20px;font-weight:900;background:#1e222e;border:2px solid #333;color:#fff}.wizPosBtn.sel{background:#facc15;color:#000;border-color:#facc15}.platBtn,.shipBtn{width:100%;padding:14px;margin-top:8px;text-align:left;font-size:15px;font-weight:800;background:#1e222e;border:2px solid #333;color:#fff}.platBtn.sel{background:#3b82f6;border-color:#3b82f6}.shipBtn.sel{background:#f59e0b;border-color:#f59e0b;color:#000}.wizFooter{position:fixed;bottom:0;left:0;right:0;display:flex;gap:8px;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));border-top:1px solid #333;background:#13151dfa;backdrop-filter:blur(10px);z-index:5}
-#photoAsk{position:fixed;inset:0;background:#000c;z-index:100004;display:none;align-items:center;justify-content:center;padding:20px}#photoAsk.on{display:flex}.photoAskBox{background:#1e222e;border:2px solid #facc15;border-radius:16px;padding:20px;width:100%;max-width:340px;text-align:center}
-#shipModal{position:fixed;inset:0;background:#000c;z-index:100005;display:none;align-items:center;justify-content:center;padding:20px}#shipModal.on{display:flex}.shipBox{background:#1e222e;border:2px solid #f59e0b;border-radius:16px;padding:20px;width:100%;max-width:420px}
-#statsModal{position:fixed;inset:0;background:#0f1115;z-index:100003;display:none;overflow:auto}#statsModal.on{display:block}
-.priceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.priceBtn{padding:16px;font-size:22px;font-weight:900;background:#1e222e;border:2px solid #333;color:#fff;border-radius:12px;text-align:center}.priceBtn.sel{background:#facc15;color:#000;border-color:#facc15}
-</style><script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head><body>
-
-<div id="photoAsk" onclick="if(event.target==this) photoAskNo()"><div class="photoAskBox"><h3 style="margin:0;color:#facc15">Foto fatta! 📸</h3><p>Vuoi farne un'altra?</p><div style="display:flex;gap:8px"><button class="y" style="flex:1" onclick="photoAskYes()">SÌ</button><button class="d" style="flex:1" onclick="photoAskNo()">NO, AVANTI</button></div></div></div>
-
-<div id="wizardModal"><div class="wizHeader"><b id="wizTitle">NUOVO</b><span id="wizCount" style="color:#9aa3b2;font-size:12px"></span></div><div class="wizBar"><i id="wizProgress"></i></div><div class="wizBody">
-<div id="wiz1" class="wizStep on"><h2>Foto</h2><div style="display:flex;gap:8px;margin-top:10px"><button class="y" style="flex:1;padding:18px" onclick="wizOpenCam()">📸 SCATTA</button><button class="d" style="flex:1;padding:18px" onclick="document.getElementById('phGalWiz').click()">GALLERIA</button></div><div id="wizThumbs" class="thumbs" style="margin-top:12px"></div><p id="wizNoFoto" style="color:#ef4444;font-size:12px">Fai almeno 1 foto</p><input id="phCamWiz" type="file" accept="image/*" capture="environment" style="display:none" onchange="wizAddPhotos(this)"><input id="phGalWiz" type="file" accept="image/*" multiple style="display:none" onchange="wizAddPhotos(this)"></div>
-<div id="wiz2" class="wizStep"><h2>Scatola</h2><label>N° scatola* <input id="wizSc" type="number" inputmode="numeric" enterkeyhint="next" placeholder="12" style="font-size:24px;text-align:center;font-weight:900;padding:18px" onkeydown="if(event.key==='Enter'){event.preventDefault();wizNext();}"></label><button class="d" style="width:100%;margin-top:12px;padding:16px;border:2px dashed #facc15;color:#facc15" onclick="wizSetSfuso()">📦 È SFUSO</button></div>
-<div id="wiz2b" class="wizStep"><h2>Dove?</h2><label>Dove si trova sfuso* <input id="wizPoSfuso" enterkeyhint="next" placeholder="Mensola garage" style="font-size:18px;padding:16px" onkeydown="if(event.key==='Enter'){event.preventDefault();wizNext();}"></label></div>
-<div id="wiz3" class="wizStep"><h2>Posizione</h2><button class="wizPosBtn" onclick="wizSetPos(1)">POS 1</button><button class="wizPosBtn" onclick="wizSetPos(2)">POS 2</button><button class="wizPosBtn" onclick="wizSetPos(3)">POS 3</button><button class="wizPosBtn" onclick="wizSetPos(4)">POS 4</button><button class="wizPosBtn" onclick="wizSetPos(5)">POS 5</button></div>
-<div id="wiz4" class="wizStep"><h2>Incolla da Chat AI</h2><label style="flex:1;display:flex;flex-direction:column">Incolla qui tutto il blocco:<textarea id="wizAIInput" rows="7" placeholder="Tieni premuto qui per incollare..." style="flex:1;font-size:13px;resize:none" oninput="parseAIInput()"></textarea></label><label>Titolo (Minuscolo): <input id="wizNome" enterkeyhint="next" style="font-size:18px;padding:12px"></label></div>
-<div id="wiz5" class="wizStep" style="flex:1"><h2>Descrizione</h2><label style="flex:1;display:flex;flex-direction:column">Descrizione completa:<textarea id="wizDesc" style="flex:1;width:100%;font-size:14px;resize:none"></textarea></label></div>
-<div id="wiz6" class="wizStep"><h2>Prezzo & Mercato</h2><label>Seleziona o scrivi il prezzo* <input id="wizPrezzo" type="number" inputmode="numeric" placeholder="10" style="font-size:24px;text-align:center;font-weight:900;padding:14px;border:2px solid #facc15"></label><div class="priceGrid"><button class="priceBtn" onclick="wizSetPrice(5)">5€</button><button class="priceBtn" onclick="wizSetPrice(8)">8€</button><button class="priceBtn" onclick="wizSetPrice(10)">10€</button><button class="priceBtn" onclick="wizSetPrice(12)">12€</button><button class="priceBtn" onclick="wizSetPrice(15)">15€</button><button class="priceBtn" onclick="wizSetPrice(20)">20€</button><button class="priceBtn" onclick="wizSetPrice(25)">25€</button><button class="priceBtn" onclick="wizSetPrice(30)">30€</button><button class="priceBtn" onclick="wizSetPrice(50)">50€</button></div><label style="color:#facc15;margin-top:16px">Analisi di Mercato (estratta automaticamente):<textarea id="wizMarket" rows="5" placeholder="L'analisi di mercato apparirà qui..." style="font-size:13px;border:2px solid #facc15;background:#171a23"></textarea></label></div>
-</div><div class="wizFooter"><button class="d" style="flex:1" onclick="wizBack()">INDIETRO</button><button id="wizNextBtn" class="y" style="flex:1" onclick="wizNext()">AVANTI</button></div></div>
-
-<div id="sellModal" onclick="if(event.target==this) closeSellModal()"><div class="sellBox"><h3 style="margin:0;color:#facc15">VENDITA - Step 1/2</h3><p id="sellItemName" style="font-weight:800;margin:10px 0"></p><label>Importo*</label><input id="sellAmount" type="number" inputmode="decimal" placeholder="15" style="font-size:20px;padding:14px;border:2px solid #facc15;text-align:center;font-weight:900"><label style="margin-top:12px">Dove l'hai venduto?*</label><div id="platList"><button class="platBtn" data-plat="Vinted" onclick="selPlat(this)">Vinted</button><button class="platBtn" data-plat="Wallapop" onclick="selPlat(this)">Wallapop</button><button class="platBtn" data-plat="Subito" onclick="selPlat(this)">Subito</button><button class="platBtn" data-plat="Marketplace" onclick="selPlat(this)">Marketplace</button><button class="platBtn" data-plat="Pagina FB" onclick="selPlat(this)">Pagina FB</button><button class="platBtn" data-plat="Altro" onclick="selPlat(this)">Altro</button></div><div id="shipStep" style="display:none;margin-top:16px;border-top:1px solid #333;padding-top:12px"><h3 style="margin:0;color:#f59e0b">Come spedisci?</h3><button class="shipBtn" data-ship="Punto Poste" onclick="selShip(this)">📦 Punto Poste</button><button class="shipBtn" data-ship="InPost" onclick="selShip(this)">📦 InPost</button><button class="shipBtn" data-ship="Ritiro a mano" onclick="selShip(this)">🤝 Ritiro a mano</button><button class="shipBtn" data-ship="Altro" onclick="selShip(this)">✏️ Altro - specifica</button><input id="shipOther" placeholder="Specifica altro..." style="display:none;margin-top:8px"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="y" style="flex:1" onclick="confirmSell()">CONFERMA -> DA SPEDIRE</button><button class="d" style="flex:1" onclick="closeSellModal()">Annulla</button></div></div></div>
-
-<div id="shipModal" onclick="if(event.target==this) closeShipModal()"><div class="shipBox"><h3 style="margin:0;color:#f59e0b">DA SPEDIRE</h3><p id="shipItemName" style="font-weight:800;margin:10px 0"></p><div id="shipItemDetails" style="color:#9aa3b2;font-size:13px"></div><div id="shipItemPics" class="thumbs"></div><p id="shipItemHow" style="margin-top:10px;font-weight:900;color:#facc15"></p><div style="display:flex;gap:8px;margin-top:14px;flex-direction:column"><button class="g" style="width:100%;padding:14px" onclick="markShipped()">✅ SEGNA COME SPEDITO</button><button class="c" style="width:100%;padding:14px" onclick="cancelShipToMag()">↩️ ANNULLA SPEDIZIONE -> TORNA IN MAGAZZINO</button><button class="d" style="width:100%;padding:12px" onclick="closeShipModal()">Chiudi</button></div></div></div>
-
-<div id="statsModal"><div style="padding:12px;position:sticky;top:0;background:#0f1115ee;backdrop-filter:blur(10px);border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;color:#facc15">Statistiche</h2><button class="d" onclick="closeStats()">CHIUDI</button></div><div style="padding:12px"><div id="statsSummary"></div><div class="card"><h3>Dove hai venduto</h3><canvas id="chartPlat"></canvas></div><div class="card"><h3>Per Mese</h3><canvas id="chartMonth"></canvas></div><div id="statsDetails"></div></div></div>
-
-<div id="backupPanel" onclick="if(event.target==this) this.classList.remove('on')"><div class="inner"><h2 style="margin:0;color:#facc15">Backup</h2><p id="bpInfo" style="color:#9aa3b2"></p><textarea id="bpText" rows="8" style="font-size:11px;display:none"></textarea><div id="bpActions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="y" style="flex:1" onclick="copyBackupText()">Copia</button><button class="g" style="flex:1" onclick="restoreFromText()">Ripristina</button><button class="d" style="flex:1" onclick="document.getElementById('backupPanel').classList.remove('on')">Chiudi</button></div></div></div>
-
-<header><h1 style="margin:0">L'APP - TINO</h1><div style="margin-top:2px;font-size:11px;color:#22c55e">Memoria illimitata</div><button class="y bigBtn" onclick="openModal(null)" style="padding:12px">+ NUOVO ARTICOLO</button><div class="row3"><button class="g top-small" onclick="doBackup()">BACKUP</button><button class="b top-small" onclick="exportAllZIPSmart()">ZIP NUOVI</button><button class="d top-small" onclick="document.getElementById('restoreFile').click()">RIPRISTINA</button><input id="restoreFile" type="file" accept=".json" style="display:none" onchange="doRestoreFile(this)"></div><div class="row3"><button class="excel top-small" onclick="exportExcel()">EXPORT EXCEL</button><button class="d top-small" onclick="doCompress()">Libera Spazio</button><button class="d top-small" onclick="resetZipFlag()">Reset ZIP</button></div><div id="quota" style="margin-top:8px;font-size:11px;color:#fbbf24"></div><input id="q" placeholder="Cerca..." oninput="render()" style="margin-top:8px"><div style="display:flex;gap:6px;margin-top:6px"><select id="fp" onchange="render()"><option value="">Tutte posizioni</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option value="SFUSO">SOLO SFUSI</option></select><select id="fb" onchange="render()"><option value="">Tutte scatole</option></select><select id="platFilter" onchange="render()"><option value="">Tutte piattaforme</option><option>Vinted</option><option>Wallapop</option><option>Subito</option><option>Marketplace</option><option>Pagina FB</option><option>Altro</option></select></div><div class="tabs"><div id="tMag" class="tab a" onclick="setTab('mag')">Da Scaricare<br><span id="cMag">0</span></div><div id="tShip" class="tab i" onclick="setTab('ship')">Da Spedire<br><span id="cShip">0</span></div><div id="tVen" class="tab i" onclick="setTab('ven')">Venduti<br><span id="cVen">0</span><br><span id="totVen" style="font-size:10px;color:#22c55e"></span><br><button id="btnStats" class="excel top-small" style="display:none;margin-top:4px" onclick="openStats()">STATISTICHE</button></div></div></header><div id="L"></div>
-
-<div id="m" onclick="if(event.target==this) closeModal()"><div class="sh"><h2 id="mt" style="margin:0">Modifica</h2><label>Nome* <input id="n"></label><label>Tipo* <select id="tipo" onchange="onTipoChange()"><option value="SCATOLA">IN SCATOLA</option><option value="SFUSO">SFUSO</option></select></label><div id="boxScatola"><label>N Scatola* <input id="sc" type="number"></label></div><div id="boxPosScatola"><label>Posizione* <select id="po"><option value="">Seleziona</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label></div><div id="boxPosSfuso" class="hidden"><label>Dove sfuso* <input id="poSfuso"></label></div><label>Foto (max 5)<div style="display:flex;gap:8px;margin-top:4px"><button class="y" style="flex:1" onclick="document.getElementById('phCam').click()">Scatta</button><button class="d" style="flex:1" onclick="document.getElementById('phGal').click()">Galleria</button></div><input id="phCam" type="file" accept="image/*" capture="environment" style="display:none" onchange="addPhotos(this)"><input id="phGal" type="file" accept="image/*" multiple style="display:none" onchange="addPhotos(this)"><div id="th" class="thumbs"></div></label><label>Descrizione <textarea id="de" rows="4"></textarea></label><label style="color:#facc15">Analisi di Mercato <textarea id="marketInfo" rows="3"></textarea></label><label>Prezzo <input id="prc"></label><label>Note <input id="no"></label><div style="display:flex;gap:8px;margin-top:14px"><button class="y" style="flex:1" onclick="saveItem()">SALVA</button><button class="d" style="flex:1" onclick="closeModal()">Annulla</button></div></div></div>
-
-<script>
-let D=[],DB=null,TAB='mag',EDIT_ID=null,curIm=[],lastBackupJSON='',SELL_ID=null,SELL_PLAT='',SELL_SHIP='',WIZ={im:[],sc:'',po:'',poSfuso:'',isSfuso:false,pos:'',nome:'',desc:'',market:'',prezzo:''},WIZ_STEP=1,WIZ_HISTORY=[],chartPlatObj=null,chartMonthObj=null,SHIP_VIEW_ID=null;
-function openDB(){return new Promise((res,rej)=>{let r=indexedDB.open('inventario_v6_db',1);r.onupgradeneeded=e=>{try{e.target.result.createObjectStore('beni',{keyPath:'id'});}catch{}};r.onsuccess=e=>{DB=e.target.result;res(DB);};r.onerror=rej;});}
-async function loadDB(){await openDB();return new Promise((res)=>{let tx=DB.transaction('beni','readonly');let store=tx.objectStore('beni');let req=store.getAll();req.onsuccess=async()=>{D=req.result||[];let need=false;D.forEach(o=>{if(o.zip==undefined)o.zip=false;if(o.soldPrice==undefined)o.soldPrice='';if(o.soldPlat==undefined)o.soldPlat='';if(o.shipMethod==undefined)o.shipMethod='';if(o.shipOther==undefined)o.shipOther='';if(o.soldAt==undefined)o.soldAt='';if(o.shippedAt==undefined)o.shippedAt='';if(o.st==undefined)o.st='mag';if(o.marketInfo==undefined)o.marketInfo='';if(o.fbDone==undefined)o.fbDone=false;});updQuota();render();if(need)await saveDB();res();};req.onerror=()=>{D=[];render();res();};});}
-function saveDB(){return new Promise((res)=>{let tx=DB.transaction('beni','readwrite');let store=tx.objectStore('beni');store.clear();D.forEach(o=>store.put(o));tx.oncomplete=()=>{updQuota();res();};});}
-function updQuota(){let mb=(JSON.stringify(D).length/1024/1024).toFixed(2);let nonZip=D.filter(x=>!x.zip && x.st=='mag').length;let tot=D.filter(x=>x.st=='ven').reduce((s,o)=>s+(parseFloat((o.soldPrice||'').toString().replace(',','.'))||0),0);document.getElementById('quota').innerHTML=`${mb} MB - ${D.length} ogg - Tot vend: ${tot.toFixed(2)} Euro - Da scaricare: ${nonZip}`;document.getElementById('totVen').innerHTML=tot>0?`Tot: ${tot.toFixed(2)} Euro`:'';let shipC=D.filter(x=>x.st=='ship').length;document.getElementById('cShip').textContent=shipC;document.getElementById('btnStats').style.display=TAB=='ven'&&D.filter(x=>x.st=='ven').length>0?'block':'none';let scat=[...new Set(D.filter(x=>x.st==TAB).map(x=>x.sc))].sort((a,b)=>{if(a=='SFUSO')return 1;if(b=='SFUSO')return -1;return a-b;});document.getElementById('fb').innerHTML='<option value="">Tutte scatole</option>'+scat.map(s=>`<option value="${s}">${s=='SFUSO'?'SFUSI':'Scatola '+s}</option>`).join('');}
-function doBackup(){let json=JSON.stringify(D);lastBackupJSON=json;document.getElementById('bpInfo').textContent=`${D.length} ogg ${(json.length/1024/1024).toFixed(2)}MB`;document.getElementById('bpText').style.display='block';document.getElementById('bpText').value=json;document.getElementById('bpActions').innerHTML=`<button class="y" style="flex:1" onclick="downloadBackup()">Scarica</button><button class="c" style="flex:1" onclick="shareBackup()">Invia</button>`;document.getElementById('backupPanel').classList.add('on');}
-function downloadBackup(){let blob=new Blob([lastBackupJSON],{type:'application/json'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download=`BACKUP_${new Date().toISOString().slice(0,10)}_${D.length}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url)},500);}
-function copyBackupText(){let ta=document.getElementById('bpText');ta.select();navigator.clipboard.writeText(ta.value).then(()=>alert('Copiato!')).catch(()=>{document.execCommand('copy');alert('Copiato!');});}
-async function shareBackup(){let json=lastBackupJSON||JSON.stringify(D);if(navigator.share){try{let file=new File([json],`backup_${D.length}.json`,{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Backup'});return;}}catch{}}doBackup();}
-function doRestoreFile(input){let file=input.files[0];if(!file)return;let r=new FileReader();r.onload=async e=>{try{let p=JSON.parse(e.target.result);if(!Array.isArray(p)){if(p.data&&Array.isArray(p.data))p=p.data;else if(p.beni&&Array.isArray(p.beni))p=p.beni;else throw new Error('Formato non valido');}if(!confirm(`Ripristinare ${p.length} articoli? SOVRASCRIVE!`))return;D=p;await openDB();let tx=DB.transaction('beni','readwrite');let store=tx.objectStore('beni');store.clear();for(let o of D)store.put(o);await new Promise(res=>{tx.oncomplete=res;});await loadDB();alert(`Ripristinati ${p.length}`);document.getElementById('backupPanel').classList.remove('on');}catch(err){alert('Errore: '+err.message);}};r.readAsText(file);input.value='';}
-function restoreFromText(){try{let ta=document.getElementById('bpText');let txt=ta.value.trim();if(!txt){alert('Incolla JSON');doBackup();return;}let p=JSON.parse(txt);if(!Array.isArray(p)){if(p.data&&Array.isArray(p.data))p=p.data;else throw new Error('Non array');}if(!confirm(`Ripristinare ${p.length}?`))return;D=p;openDB().then(()=>{let tx=DB.transaction('beni','readwrite');let store=tx.objectStore('beni');store.clear();for(let o of D)store.put(o);tx.oncomplete=()=>{loadDB();alert('Ripristinato!');document.getElementById('backupPanel').classList.remove('on');}});}catch(err){alert('Errore: '+err.message);}}
-function setTab(t){TAB=t;document.getElementById('tMag').className='tab '+(t=='mag'?'a':'i');document.getElementById('tShip').className='tab '+(t=='ship'?'a':'i');document.getElementById('tVen').className='tab '+(t=='ven'?'a':'i');render();}
-function hideKeyboard(){if(document.activeElement)document.activeElement.blur();}
-function openWizard(){WIZ={im:[],sc:'',po:'',poSfuso:'',isSfuso:false,pos:'',nome:'',desc:'',market:'',prezzo:''};WIZ_STEP=1;WIZ_HISTORY=[];['wizSc','wizPoSfuso','wizAIInput','wizNome','wizDesc','wizMarket','wizPrezzo'].forEach(id=>{let el=document.getElementById(id);if(el)el.value='';});document.querySelectorAll('.wizPosBtn,.priceBtn').forEach(b=>b.classList.remove('sel'));document.getElementById('wizThumbs').innerHTML='';document.getElementById('wizardModal').classList.add('on');wizShowStep(1);setTimeout(()=>wizOpenCam(),300);}
-function closeWizard(){hideKeyboard();document.getElementById('wizardModal').classList.remove('on');}
-function wizShowStep(s){document.querySelectorAll('.wizStep').forEach(e=>e.classList.remove('on'));document.getElementById('wiz'+s).classList.add('on');WIZ_STEP=s;let pct={1:16,2:33,'2b':40,3:55,4:70,5:85,6:100}[s]||16;document.getElementById('wizProgress').style.width=pct+'%';document.getElementById('wizCount').textContent='Step '+s+'/6';document.getElementById('wizTitle').textContent={1:'Foto',2:'Scatola','2b':'Sfuso',3:'Posizione',4:'Incolla Chat',5:'Descrizione',6:'Prezzo & Mercato'}[s]||'Nuovo';document.getElementById('wizNextBtn').textContent=s==6?'SALVA':'AVANTI';document.getElementById('wizNoFoto').style.display=WIZ.im.length==0?'block':'none';}
-function wizOpenCam(){document.getElementById('phCamWiz').click();}
-function wizAddPhotos(inp){let files=[...inp.files].slice(0,5-WIZ.im.length);if(!files.length){inp.value='';return;}files.forEach(f=>{let r=new FileReader();r.onload=e=>{let img=new Image();img.onload=()=>{let c=document.createElement('canvas');let max=800,w=img.width,h=img.height;if(w>max||h>max){if(w>h){h*=max/w;w=max}else{w*=max/h;h=max}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);WIZ.im.push(c.toDataURL('image/jpeg',0.6));wizRenderThumbs();if(inp.id=='phCamWiz')document.getElementById('photoAsk').classList.add('on');};img.src=e.target.result;};r.readAsDataURL(f);});inp.value='';}
-function photoAskYes(){document.getElementById('photoAsk').classList.remove('on');setTimeout(()=>wizOpenCam(),200);}
-function photoAskNo(){document.getElementById('photoAsk').classList.remove('on');if(WIZ.im.length>0){WIZ_HISTORY.push(1);wizShowStep(2);}}
-function wizRenderThumbs(){document.getElementById('wizThumbs').innerHTML=WIZ.im.map((s,i)=>`<div class=th><img src="${s}"><b onclick="WIZ.im.splice(${i},1);wizRenderThumbs()">X</b></div>`).join('');document.getElementById('wizNoFoto').style.display=WIZ.im.length==0?'block':'none';}
-function wizSetSfuso(){hideKeyboard();WIZ.isSfuso=true;WIZ_HISTORY.push(WIZ_STEP);wizShowStep('2b');}
-function wizSetPos(p){hideKeyboard();WIZ.pos=p;document.querySelectorAll('.wizPosBtn').forEach(b=>b.classList.toggle('sel',b.textContent.includes(p)));setTimeout(()=>wizNext(),400);}
-function wizSetPrice(p){hideKeyboard();WIZ.prezzo=p;document.getElementById('wizPrezzo').value=p;document.querySelectorAll('.priceBtn').forEach(b=>b.classList.toggle('sel',b.textContent.includes(p+'€')));setTimeout(()=>wizNext(),400);}
-function wizBack(){hideKeyboard();if(WIZ_HISTORY.length==0){if(WIZ_STEP==1){closeWizard();return;}wizShowStep({2:1,'2b':2,3:2,4:3,5:4,6:5}[WIZ_STEP]||1);return;}wizShowStep(WIZ_HISTORY.pop());}
-
-function parseAIInput(){
-    let txt=document.getElementById('wizAIInput').value.trim();
-    if(!txt)return;
-    
-    let marketPart = "";
-    let mainPart = txt;
-    let marketIndex = txt.toUpperCase().indexOf("ANALISI DI MERCATO");
-    if(marketIndex !== -1) {
-        marketPart = txt.substring(marketIndex).trim();
-        mainPart = txt.substring(0, marketIndex).trim();
-    }
-    
-    let lines = mainPart.split('\n').map(l=>l.trim()).filter(Boolean);
-    if(lines.length>0){
-        let title = lines[0].toLowerCase();
-        document.getElementById('wizNome').value = title;
-        
-        let rest = lines.slice(1).join('\n');
-        let promo = `VISITA LA PAGINA FACEBOOK "DI TUTTO UN PO'" per vedere tutti gli articoli e non perderti le novità in arrivo. Acquista più prodotti per risparmiare sui costi di spedizione.\n\n`;
-        if(!rest.includes('VISITA LA PAGINA FACEBOOK')) {
-            rest = promo + rest;
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'APP - TINO | Gestione Inventario</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text: #0f172a;
+            --border: #e2e8f0;
+            --personal-bg: #fef2f2;
+            --personal-border: #fca5a5;
         }
-        document.getElementById('wizDesc').value = rest;
-    }
-    
-    if(marketPart) {
-        document.getElementById('wizMarket').value = marketPart;
-    }
-}
 
-function wizNext(){
-    hideKeyboard();
-    if(WIZ_STEP==1){if(!WIZ.im.length){alert('Fai foto');return;}WIZ_HISTORY.push(1);wizShowStep(2);return;}
-    if(WIZ_STEP==2){let sc=document.getElementById('wizSc').value.trim();if(!sc&&!WIZ.isSfuso){alert('Scatola o sfuso');return;}WIZ.sc=sc;WIZ_HISTORY.push(2);wizShowStep(WIZ.isSfuso?'2b':3);return;}
-    if(WIZ_STEP=='2b'){let ps=document.getElementById('wizPoSfuso').value.trim();if(!ps){alert('Dove?');return;}WIZ.poSfuso=ps;WIZ_HISTORY.push('2b');wizShowStep(4);return;}
-    if(WIZ_STEP==3){if(!WIZ.pos){alert('Posizione');return;}WIZ_HISTORY.push(3);wizShowStep(4);return;}
-    if(WIZ_STEP==4){let n=document.getElementById('wizNome').value.trim();if(!n){alert('Inserisci titolo');return;}WIZ.nome=n;WIZ.desc=document.getElementById('wizDesc').value.trim();WIZ_HISTORY.push(4);wizShowStep(5);return;}
-    if(WIZ_STEP==5){WIZ.desc=document.getElementById('wizDesc').value.trim();WIZ_HISTORY.push(5);wizShowStep(6);return;}
-    if(WIZ_STEP==6){
-        let pr=document.getElementById('wizPrezzo').value.trim() || document.getElementById('wizPrezzo').value;
-        if(!pr){alert('Prezzo?');return;}
-        WIZ.prezzo=pr;
-        WIZ.market=document.getElementById('wizMarket').value.trim();
-        wizSave();
-    }
-}
-async function wizSave(){
-    hideKeyboard();
-    let isSfuso=WIZ.isSfuso||WIZ.sc=='';
-    let o={
-        id:Date.now(),
-        n:WIZ.nome,
-        sc:isSfuso?'SFUSO':WIZ.sc,
-        po:isSfuso?WIZ.poSfuso:WIZ.pos,
-        de:WIZ.desc,
-        marketInfo:WIZ.market,
-        prc:WIZ.prezzo+' ,00 Euro',
-        no:'',
-        im:[...WIZ.im],
-        st:'mag',
-        zip:false,
-        soldPrice:'',
-        soldPlat:'',
-        shipMethod:'',
-        shipOther:'',
-        soldAt:'',
-        shippedAt:'',
-        fbDone:false
-    };
-    D.unshift(o);
-    await saveDB();
-    closeWizard();
-    render();
-}
-function onTipoChange(){let sf=document.getElementById('tipo').value=='SFUSO';document.getElementById('boxScatola').className=sf?'hidden':'';document.getElementById('boxPosScatola').className=sf?'hidden':'';document.getElementById('boxPosSfuso').className=sf?'':'hidden';}
-function openModal(id=null){if(id==null){openWizard();return;}EDIT_ID=id;curIm=[];document.getElementById('th').innerHTML='';let o=D.find(x=>x.id==id);document.getElementById('n').value=o.n;document.getElementById('de').value=o.de||'';document.getElementById('marketInfo').value=o.marketInfo||'';document.getElementById('prc').value=o.prc||'';document.getElementById('no').value=o.no||'';curIm=[...(o.im||[])];renderThumbs();if(o.sc=='SFUSO'){document.getElementById('tipo').value='SFUSO';onTipoChange();document.getElementById('poSfuso').value=o.po;}else{document.getElementById('tipo').value='SCATOLA';onTipoChange();document.getElementById('sc').value=o.sc;document.getElementById('po').value=o.po;}document.getElementById('m').classList.add('o');}
-function closeModal(){document.getElementById('m').classList.remove('o');EDIT_ID=null;curIm=[];}
-function addPhotos(inp){let files=[...inp.files].slice(0,5-curIm.length);files.forEach(f=>{let r=new FileReader();r.onload=e=>{let img=new Image();img.onload=()=>{let c=document.createElement('canvas');let max=800,w=img.width,h=img.height;if(w>max||h>max){if(w>h){h*=max/w;w=max}else{w*=max/h;h=max}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);curIm.push(c.toDataURL('image/jpeg',0.6));renderThumbs();};img.src=e.target.result;};r.readAsDataURL(f);});inp.value='';}
-function renderThumbs(){document.getElementById('th').innerHTML=curIm.map((s,i)=>`<div class=th><img src="${s}"><b onclick="curIm.splice(${i},1);renderThumbs()">X</b></div>`).join('');}
-async function saveItem(){let isSfuso=document.getElementById('tipo').value=='SFUSO';let nome=document.getElementById('n').value.trim();if(!nome){alert('Nome?');return;}let scV=isSfuso?'SFUSO':document.getElementById('sc').value.trim();let poV=isSfuso?document.getElementById('poSfuso').value.trim():document.getElementById('po').value.trim();if(!scV||!poV){alert('Manca scatola/pos');return;}let ex=D.find(x=>x.id==EDIT_ID);let o={id:EDIT_ID!=null?EDIT_ID:Date.now(),n:nome,sc:scV,po:poV,de:document.getElementById('de').value.trim(),marketInfo:document.getElementById('marketInfo').value.trim(),prc:document.getElementById('prc').value.trim(),no:document.getElementById('no').value.trim(),im:[...curIm],st:ex?.st||'mag',zip:ex?.zip||false,soldPrice:ex?.soldPrice||'',soldPlat:ex?.soldPlat||'Vinted',shipMethod:ex?.shipMethod||'',shipOther:ex?.shipOther||'',soldAt:ex?.soldAt||'',shippedAt:ex?.shippedAt||'',fbDone:ex?.fbDone||false};if(EDIT_ID!=null){D[D.findIndex(x=>x.id==EDIT_ID)]=o;}else{D.unshift(o);}await saveDB();closeModal();render();}
-function render(){let qv=document.getElementById('q').value.toLowerCase();let fpv=document.getElementById('fp').value;let fbv=document.getElementById('fb').value;let platF=document.getElementById('platFilter').value;let F=D.filter(x=>{if(TAB=='mag'){if(x.st!='mag'||x.zip)return 0;}else{if(x.st!=TAB)return 0;}if(fpv){if(fpv=='SFUSO'){if(x.sc!='SFUSO')return 0;}else if(x.sc!='SFUSO'&&x.po!=fpv)return 0;}if(fbv&&x.sc!=fbv)return 0;if(platF&& (TAB=='ven'||TAB=='ship') && x.soldPlat!=platF)return 0;if(qv){let t=(x.n+' '+x.sc+' '+x.po+' '+(x.de||'')+' '+(x.soldPlat||'')+' '+(x.shipMethod||'')).toLowerCase();if(!t.includes(qv))return 0;}return 1;});let mag=D.filter(x=>x.st=='mag' && !x.zip).length;let ship=D.filter(x=>x.st=='ship').length;let ven=D.filter(x=>x.st=='ven');let tot=ven.reduce((s,o)=>s+(parseFloat((o.soldPrice||'').toString().replace(',','.'))||0),0);document.getElementById('cMag').textContent=mag;document.getElementById('cShip').textContent=ship;document.getElementById('cVen').textContent=ven.length;document.getElementById('totVen').innerHTML=tot>0?`Tot: ${tot.toFixed(2)}€`:'';document.getElementById('btnStats').style.display=TAB=='ven'&&ven.length>0?'block':'none';let scat=[...new Set(D.filter(x=>x.st==TAB).map(x=>x.sc))].sort((a,b)=>{if(a=='SFUSO')return 1;if(b=='SFUSO')return -1;return a-b;});document.getElementById('fb').innerHTML='<option value="">Tutte scatole</option>'+scat.map(s=>`<option value="${s}">${s=='SFUSO'?'SFUSI':'Scatola '+s}</option>`).join('');document.getElementById('L').innerHTML=F.map(x=>{let z=x.zip?`<span class="badge ok">ZIP OK</span>`:`<span class="badge new">NUOVO</span>`;let fbBadge=x.fbDone?`<span class="badge ok">FB ✅</span>`:`<span class="badge" style="background:#ef4444;color:#fff">FB ❌</span>`;let plat=x.soldPlat?`<span class="badge plat">${x.soldPlat}</span>`:'';let shipB=x.shipMethod?`<span class="badge ship">${x.shipMethod}${x.shipOther?' : '+x.shipOther:''}</span>`:'';let sold=x.st!='mag'&&x.soldPrice?`<span class="badge sold">${x.soldPrice}€</span>`:'';let btnAction='';if(x.st=='mag')btnAction=`<button class=s style="background:#facc15;color:#000" onclick="toggleSold(${x.id})">Vendi</button>`;else if(x.st=='ship')btnAction=`<button class=s style="background:#f59e0b;color:#000" onclick="openShip(${x.id})">📦 SPEDISCI</button>`;else btnAction=`<button class=s style="background:#555;color:#fff" onclick="toggleSold(${x.id})">Ripristina</button>`;return `<div class=card><div><span class=badge>${x.sc=='SFUSO'?'SFUSO':'SCATOLA '+x.sc}</span> <span class=badge style="background:#3b82f6;color:#fff">POS ${x.po}</span> ${z} ${fbBadge} ${plat} ${shipB} ${sold} <b>${x.n}</b></div>${x.im&&x.im.length?`<div class=thumbs>${x.im.map(s=>`<img src="${s}" style="width:70px;height:70px;object-fit:cover;border-radius:8px">`).join('')}</div>`:''}<div style="color:#9aa3b2;font-size:13px;margin-top:6px">${x.de?x.de.substring(0,120)+'...<br>':''}${x.marketInfo?`<span style="color:#facc15">Mercato: ${x.marketInfo}</span><br>`:''}${x.prc?`Listino: ${x.prc}<br>`:''}${x.st!='mag'?`<span style="color:#22c55e;font-weight:800">Venduto ${x.soldPrice}€ su ${x.soldPlat} - Sped: ${x.shipMethod} ${x.shipOther||''}</span><br>`:''}</div><div style="display:flex;gap:5px;margin-top:10px;flex-wrap:wrap"><button class=s onclick="openModal(${x.id})">Modifica</button><button class=fb onclick="shareFB(${x.id})">FB</button><button class=s onclick="exportOne(${x.id})">ZIP</button><button class=s style="background:#ef4444;color:#fff" onclick="delItem(${x.id})">Elimina</button>${btnAction}</div></div>`;}).join('')||'<p style="text-align:center;color:#777;padding:30px">Nessun bene da visualizzare</p>';}
-async function delItem(id){if(confirm('Eliminare davvero?')){D=D.filter(x=>x.id!=id);await saveDB();render();}}
-function toggleSold(id){let o=D.find(x=>x.id==id);if(o.st=='mag'){SELL_ID=id;SELL_PLAT='';SELL_SHIP='';document.getElementById('sellItemName').textContent=o.n+' - '+ (o.prc||'');document.getElementById('sellAmount').value=o.prc?o.prc.replace(/[^0-9]/g,''):o.soldPrice||'';document.querySelectorAll('.platBtn').forEach(b=>b.classList.remove('sel'));document.querySelectorAll('.shipBtn').forEach(b=>b.classList.remove('sel'));document.getElementById('shipStep').style.display='none';document.getElementById('shipOther').style.display='none';document.getElementById('shipOther').value='';document.getElementById('sellModal').classList.add('on');}else{if(confirm('Ripristinare in magazzino?')){o.st='mag';saveDB().then(()=>render());}}}
-function selPlat(btn){document.querySelectorAll('.platBtn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');SELL_PLAT=btn.dataset.plat;document.getElementById('shipStep').style.display='block';}
-function selShip(btn){document.querySelectorAll('.shipBtn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');SELL_SHIP=btn.dataset.ship;if(SELL_SHIP=='Altro'){document.getElementById('shipOther').style.display='block';document.getElementById('shipOther').focus();}else{document.getElementById('shipOther').style.display='none';}}
-function closeSellModal(){document.getElementById('sellModal').classList.remove('on');SELL_ID=null;SELL_PLAT='';SELL_SHIP='';}
-async function confirmSell(){let amt=document.getElementById('sellAmount').value.trim();if(!amt){alert('Importo?');return;}if(!SELL_PLAT){alert('Dove venduto?');return;}if(!SELL_SHIP){alert('Come spedisci?');return;}let other='';if(SELL_SHIP=='Altro'){other=document.getElementById('shipOther').value.trim();if(!other){alert('Specifica altro');return;}}let o=D.find(x=>x.id==SELL_ID);if(!o)return;o.soldPrice=amt;o.soldPlat=SELL_PLAT;o.shipMethod=SELL_SHIP;o.shipOther=other;o.soldAt=new Date().toISOString();o.st='ship';await saveDB();closeSellModal();setTab('ship');render();}
-function openShip(id){let o=D.find(x=>x.id==id);if(!o)return;SHIP_VIEW_ID=id;document.getElementById('shipItemName').textContent=o.n;document.getElementById('shipItemDetails').innerHTML=`Venduto su <b>${o.soldPlat}</b> a ${o.soldPrice}€<br>Scatola ${o.sc} Pos ${o.po}<br>${o.de||''}`;document.getElementById('shipItemPics').innerHTML=(o.im||[]).map(s=>`<img src="${s}" style="width:70px;height:70px;object-fit:cover;border-radius:8px">`).join('');document.getElementById('shipItemHow').textContent=`Spedizione: ${o.shipMethod} ${o.shipOther||''}`;document.getElementById('shipModal').classList.add('on');}
-function closeShipModal(){document.getElementById('shipModal').classList.remove('on');SHIP_VIEW_ID=null;}
-async function markShipped(){let o=D.find(x=>x.id==SHIP_VIEW_ID);if(!o)return;if(!confirm(`Segnare come spedito? Andrà in Venduti su ${o.soldPlat}`))return;o.shippedAt=new Date().toISOString();o.st='ven';await saveDB();closeShipModal();setTab('ven');render();}
-async function cancelShipToMag(){let o=D.find(x=>x.id==SHIP_VIEW_ID);if(!o)return;if(!confirm(`Annullare la spedizione? L'oggetto tornerà disponibile in magazzino.`))return;o.st='mag';o.soldPrice='';o.soldPlat='';o.shipMethod='';o.shipOther='';o.soldAt='';await saveDB();closeShipModal();setTab('mag');render();}
-function b64toU8(b64){let bin=atob(b64.split(',')[1]),l=bin.length,a=new Uint8Array(l);for(let i=0;i<l;i++)a[i]=bin.charCodeAt(i);return a;}
-async function exportOne(id){let x=D.find(o=>o.id==id);let safe=x.n.replace(/[^a-z0-9]/gi,'_').slice(0,30);let zip=new JSZip();zip.file(safe+'.txt',`${x.n}\n${x.sc} ${x.po}\n${x.de}\nMercato: ${x.marketInfo||''}\n${x.prc}\nVenduto ${x.soldPrice} su ${x.soldPlat} - ${x.shipMethod} ${x.shipOther||''}`);(x.im||[]).forEach((b,i)=>{try{zip.file(`${safe}_${i+1}.jpg`,b64toU8(b));}catch{}});let blob=await zip.generateAsync({type:'blob'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=safe+'.zip';a.click();x.zip=true;await saveDB();render();}
-async function exportAllZIPSmart(){let list=D.filter(x=>x.st=='mag' && !x.zip);if(!list.length){if(confirm('Nessun elemento nuovo da scaricare. Vuoi scaricarli tutti comunque?')){list=D.filter(x=>x.st=='mag');}else return;}let zip=new JSZip();for(let x of list){let safe=(x.n.replace(/[^a-z0-9]/gi,'_').slice(0,20)+'_'+x.id);zip.file(safe+'/info.txt',`${x.n}\n${x.sc}/${x.po}\n${x.de}\nMercato: ${x.marketInfo||''}\n${x.prc}\nVend ${x.soldPrice} su ${x.soldPlat} - ${x.shipMethod}`);(x.im||[]).forEach((b,i)=>{try{zip.file(`${safe}/foto_${i+1}.jpg`,b64toU8(b));}catch{}});}let blob=await zip.generateAsync({type:'blob'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`ARCHIVIO_${list.length}.zip`;a.click();for(let x of list)x.zip=true;await saveDB();render();}
-async function resetZipFlag(){if(confirm('Reset ZIP? Tutti torneranno visibili in Da Scaricare.')){D.forEach(o=>o.zip=false);await saveDB();render();}}
-function exportExcel(){if(!D.length){alert('Niente');return;}let rows=D.map(o=>({ID:o.id,Nome:o.n,Scatola:o.sc,Pos:o.po,Desc:o.de||'',Mercato:o.marketInfo||'',Listino:o.prc||'',Venduto:o.soldPrice||'',Piattaforma:o.soldPlat||'',Spedizione:o.shipMethod||'',DettSped:o.shipOther||'',DataVend:o.soldAt||'',DataSped:o.shippedAt||'',Stato:o.st,Note:o.no||''}));let ws=XLSX.utils.json_to_sheet(rows);let wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Inv');XLSX.writeFile(wb,`REPORT_TINO_${new Date().toISOString().slice(0,10)}_${D.length}.xlsx`);}
-async function doCompress(){if(!confirm('Comprimi 40%?'))return;for(let o of D){let ni=[];for(let b of (o.im||[])){try{let img=await new Promise((res,rej)=>{let i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=b;});let c=document.createElement('canvas');let max=500,w=img.width,h=img.height;if(w>max||h>max){if(w>h){h*=max/w;w=max}else{w*=max/h;h=max}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);ni.push(c.toDataURL('image/jpeg',0.4));}catch{ni.push(b);}}o.im=ni;}await saveDB();render();alert('Compresso!');}
-async function shareFB(id){let x=D.find(o=>o.id==id);if(!x)return;let txt=`${x.n}\n\nVISITA LA PAGINA FACEBOOK "DI TUTTO UN PO'" per vedere tutti gli articoli e non perderti le novità in arrivo. Acquista più prodotti per risparmiare sui costi di spedizione.\n\n${x.de||''}\n\nPrezzo: ${x.prc||''} Euro\nScatola ${x.sc} Pos ${x.po}`;try{if(x.im&&x.im.length){let files=[];for(let i=0;i<x.im.length;i++){let r=await fetch(x.im[i]);let b=await r.blob();files.push(new File([b],`foto_${i+1}.jpg`,{type:'image/jpeg'}));}if(navigator.canShare&&navigator.canShare({files:files})){await navigator.share({title:x.n,text:txt,files:files});x.fbDone=true;await saveDB();render();return;}}}catch{}try{if(navigator.share){await navigator.share({title:x.n,text:txt});x.fbDone=true;await saveDB();render();return;}}catch{}try{await navigator.clipboard.writeText(txt);alert('Testo copiato per Facebook!');x.fbDone=true;await saveDB();render();}catch{}window.open('https://www.facebook.com/sharer/sharer.php?quote='+encodeURIComponent(txt),'_blank');}
-function openStats(){let ven=D.filter(x=>x.st=='ven');if(!ven.length){alert('Nessuna vendita finale');return;}let byPlat={},totPlat={};ven.forEach(o=>{let p=o.soldPlat||'Altro';byPlat[p]=(byPlat[p]||0)+1;totPlat[p]=(totPlat[p]||0)+(parseFloat(o.soldPrice||'').toString().replace(',','.')||0);});let byMonth={},totMonth={};ven.forEach(o=>{let d=o.soldAt?new Date(o.soldAt):new Date();let key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');byMonth[key]=(byMonth[key]||0)+1;totMonth[key]=(totMonth[key]||0)+(parseFloat(o.soldPrice||'').toString().replace(',','.')||0);});document.getElementById('statsSummary').innerHTML=`<div class="card"><b>Totale venduti finali: ${ven.length}</b> - Tot incassato: ${Object.values(totPlat).reduce((a,b)=>a+b,0).toFixed(2)}€<br><br>`+Object.keys(byPlat).map(p=>`${p}: ${byPlat[p]} ogg - ${totPlat[p].toFixed(2)}€`).join('<br>')+`</div>`;document.getElementById('statsDetails').innerHTML=Object.keys(byPlat).map(p=>{let list=ven.filter(x=>x.soldPlat==p);return `<div class=card><h4>${p} - ${list.length} ogg - ${totPlat[p].toFixed(2)}€</h4>`+list.map(x=>`• ${x.n} - ${x.soldPrice}€ - Sped: ${x.shipMethod} ${x.shipOther||''} - ${x.soldAt?new Date(x.soldAt).toLocaleDateString():''}`).join('<br>')+`</div>`;}).join('');document.getElementById('statsModal').classList.add('on');setTimeout(()=>{if(chartPlatObj)chartPlatObj.destroy();let ctx=document.getElementById('chartPlat').getContext('2d');chartPlatObj=new Chart(ctx,{type:'pie',data:{labels:Object.keys(byPlat),datasets:[{data:Object.values(byPlat),backgroundColor:['#3b82f6','#22c55e','#facc15','#f59e0b','#8b5cf6','#ef4444']}]}});let months=Object.keys(byMonth).sort();let ctx2=document.getElementById('chartMonth').getContext('2d');if(chartMonthObj)chartMonthObj.destroy();chartMonthObj=new Chart(ctx2,{type:'bar',data:{labels:months,datasets:[{label:'Pezzi',data:months.map(k=>byMonth[k]),backgroundColor:'#facc15'},{label:'Euro',data:months.map(k=>totMonth[k]),backgroundColor:'#22c55e'}]}});},200);}
-function closeStats(){document.getElementById('statsModal').classList.remove('on');}
-loadDB();
-</script></body></html>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        h1 { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover { background: var(--primary-hover); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .card.is-personal {
+            background-color: var(--personal-bg);
+            border-color: var(--personal-border);
+        }
+
+        .card.is-personal .item-title {
+            text-decoration: line-through;
+            color: #991b1b;
+        }
+
+        .item-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: lowercase;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-personal { background: #fee2e2; color: #991b1b; }
+        .badge-general { background: #dbeafe; color: #1e40af; }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-container input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>L'APP - TINO Catalogazione</h1>
+        <button class="btn" onclick="exportZip()">Esporta Archivio ZIP</button>
+    </header>
+
+    <div class="grid" id="inventory-list"></div>
+
+    <script>
+        // Simulazione archivio elementi
+        let items = [
+            {
+                id: 1,
+                title: "contenitore trasparente ikea 365+ da 1,3 litri",
+                location: "Scatola A1 - Posizione 3",
+                price: 3.00,
+                isPersonal: false,
+                description: "VISITA LA PAGINA FACEBOOK \"DI TUTTO UN PO'\"...\nPratico contenitore per alimenti...\nANALISI DI MERCATO: Consigliato 3,00€"
+            },
+            {
+                id: 2,
+                title: "barattolo in vetro con coperchio in metallo 9x12 cm",
+                location: "Scatola B2 - Posizione 1",
+                price: 4.00,
+                isPersonal: true, // Oggetto barrato/personale
+                description: "VISITA LA PAGINA FACEBOOK \"DI TUTTO UN PO'\"...\nPratico barattolo portaspezie...\nANALISI DI MERCATO: Consigliato 4,00€"
+            }
+        ];
+
+        function renderItems() {
+            const container = document.getElementById('inventory-list');
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `card ${item.isPersonal ? 'is-personal' : ''}`;
+                
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <span class="badge ${item.isPersonal ? 'badge-personal' : 'badge-general'}">
+                            ${item.isPersonal ? 'Cartella Personale' : 'Inventario Generale'}
+                        </span>
+                        <label class="checkbox-container">
+                            <input type="checkbox" ${item.isPersonal ? 'checked' : ''} onchange="togglePersonal(${item.id})">
+                            Oggetto Personale (Barrato)
+                        </label>
+                    </div>
+                    <div class="item-title">${item.title}</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">
+                        <div><strong>Posizione:</strong> ${item.location}</div>
+                        <div><strong>Prezzo consigliato:</strong> €${item.price.toFixed(2)}</div>
+                    </div>
+                    <textarea readonly>${item.description}</textarea>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function togglePersonal(id) {
+            const item = items.find(i => i.id === id);
+            if (item) {
+                item.isPersonal = !item.isPersonal;
+                renderItems();
+            }
+        }
+
+        async function exportZip() {
+            const zip = new JSZip();
+            const generalFolder = zip.folder("inventario_generale");
+            const personalFolder = zip.folder("cartella_personale");
+
+            items.forEach(item => {
+                const targetFolder = item.isPersonal ? personalFolder : generalFolder;
+                const fileName = `${item.id}_${item.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.txt`;
+                
+                const fileContent = `TITOLO: ${item.title}\n` +
+                                    `POSIZIONE: ${item.location}\n` +
+                                    `PREZZO: €${item.price.toFixed(2)}\n` +
+                                    `TAG PERSONALE: ${item.isPersonal ? 'SÌ' : 'NO'}\n\n` +
+                                    `--- DESCIZIONE E MERCATO ---\n` +
+                                    `${item.description}`;
+
+                targetFolder.file(fileName, fileContent);
+            });
+
+            const blob = await zip.generateAsync({type: "blob"});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `inventario_tino_${new Date().toISOString().slice(0,10)}.zip`;
+            link.click();
+        }
+
+        // Inizializzazione prima vista
+        renderItems();
+    </script>
+</body>
+</html>
