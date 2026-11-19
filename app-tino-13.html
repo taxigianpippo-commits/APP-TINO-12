@@ -1034,6 +1034,55 @@ async function cancelShipToMag(){
 
 async function togglePers(id){let o=D.find(x=>x.id==id);if(o){o.personal=!o.personal;o.dirtyBackup=true;await saveDB();render();}}
 async function toggleFb(id){let o=D.find(x=>x.id==id);if(o){o.fbDone=!o.fbDone;o.dirtyBackup=true;await saveDB();render();}}
+
+async function dataUrlToFile(dataUrl, filename){
+  let res=await fetch(dataUrl);
+  let blob=await res.blob();
+  return new File([blob], filename, {type: blob.type || 'image/jpeg'});
+}
+
+async function shareToFbFeed(id){
+  let o=D.find(x=>x.id==id);
+  if(!o)return;
+  o.fbDone=true;
+  o.dirtyBackup=true;
+  await saveDB();
+  render();
+
+  let cleanBody=cleanFbPromo(o.de||'');
+  let priceLine=o.prc?`Prezzo: ${o.prc}`:'';
+  let postText=[o.n, priceLine, cleanBody, FB_PROMO_TEXT].filter(Boolean).join('\n\n').trim();
+
+  let files=[];
+  if(Array.isArray(o.im) && o.im.length){
+    for(let i=0;i<o.im.length;i++){
+      try{
+        let f=await dataUrlToFile(o.im[i], `foto_${i+1}.jpg`);
+        files.push(f);
+      }catch{}
+    }
+  }
+
+  if(navigator.share){
+    try{
+      let sharePayload={title:o.n||'Annuncio', text:postText};
+      if(files.length && navigator.canShare && navigator.canShare({files})){
+        sharePayload.files=files;
+      }
+      await navigator.share(sharePayload);
+      return;
+    }catch(err){
+      if(err && err.name==='AbortError')return;
+    }
+  }
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    try{await navigator.clipboard.writeText(postText);}catch{}
+  }
+  let fbUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href.startsWith('http')?location.href:'https://www.facebook.com')}&quote=${encodeURIComponent(postText)}`;
+  window.open(fbUrl,'_blank','noopener,noreferrer');
+}
+
 async function delItem(id){if(!confirm('Eliminare questo articolo?'))return;D=D.filter(x=>x.id!=id);await saveDB();render();}
 
 async function exportAllZIPSmart(){
@@ -1266,7 +1315,7 @@ function render(){
         ${o.st=='mag'?`<button class="g s" onclick="openSellModal(${o.id})">Vendi</button>`:''}
         ${o.st=='ship'?`<button class="b s" onclick="openShipModal(${o.id})">Gestisci Spedizione</button>`:''}
         <button class="s" onclick="togglePers(${o.id})">${o.personal?'Togli ⭐':'⭐ Pers.'}</button>
-        <button class="${o.fbDone?'fbDone':'fb'} s" onclick="toggleFb(${o.id})">${o.fbDone?'✅ FB CONDIVISO':'FB'}</button>
+        <button class="${o.fbDone?'fbDone':'fb'} s" onclick="shareToFbFeed(${o.id})">${o.fbDone?'✅ FB CONDIVISO':'FB'}</button>
         <button class="d s" onclick="delItem(${o.id})" style="color:#ef4444">Elimina</button>
       </div>
     </div>
