@@ -1035,19 +1035,26 @@ async function cancelShipToMag(){
 async function togglePers(id){let o=D.find(x=>x.id==id);if(o){o.personal=!o.personal;o.dirtyBackup=true;await saveDB();render();}}
 async function toggleFb(id){let o=D.find(x=>x.id==id);if(o){o.fbDone=!o.fbDone;o.dirtyBackup=true;await saveDB();render();}}
 
-async function dataUrlToFile(dataUrl, filename){
-  let res=await fetch(dataUrl);
-  let blob=await res.blob();
-  return new File([blob], filename, {type: blob.type || 'image/jpeg'});
+function dataUrlToFile(dataUrl, filename){
+  let parts=String(dataUrl||'').split(',');
+  if(parts.length<2)return null;
+  let mimeMatch=parts[0].match(/:(.*?);/);
+  let mime=mimeMatch?mimeMatch[1]:'image/jpeg';
+  let bstr=atob(parts[1]);
+  let n=bstr.length;
+  let u8arr=new Uint8Array(n);
+  for(let i=0;i<n;i++)u8arr[i]=bstr.charCodeAt(i);
+  return new File([u8arr], filename, {type:mime});
 }
 
-async function shareToFbFeed(id){
+function shareToFbFeed(id){
   let o=D.find(x=>x.id==id);
   if(!o)return;
+
   o.fbDone=true;
   o.dirtyBackup=true;
-  await saveDB();
   render();
+  saveDB();
 
   let cleanBody=cleanFbPromo(o.de||'');
   let priceLine=o.prc?`Prezzo: ${o.prc}`:'';
@@ -1056,31 +1063,30 @@ async function shareToFbFeed(id){
   let files=[];
   if(Array.isArray(o.im) && o.im.length){
     for(let i=0;i<o.im.length;i++){
-      try{
-        let f=await dataUrlToFile(o.im[i], `foto_${i+1}.jpg`);
-        files.push(f);
-      }catch{}
+      let f=dataUrlToFile(o.im[i], `foto_${i+1}.jpg`);
+      if(f)files.push(f);
     }
   }
 
   if(navigator.share){
-    try{
-      let sharePayload={title:o.n||'Annuncio', text:postText};
-      if(files.length && navigator.canShare && navigator.canShare({files})){
-        sharePayload.files=files;
-      }
-      await navigator.share(sharePayload);
-      return;
-    }catch(err){
-      if(err && err.name==='AbortError')return;
+    let sharePayload={title:o.n||'Annuncio', text:postText};
+    if(files.length && navigator.canShare && navigator.canShare({files})){
+      sharePayload.files=files;
     }
+    navigator.share(sharePayload).catch(err=>{
+      if(err && err.name==='AbortError')return;
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(postText).catch(()=>{});
+      }
+      alert('Il browser non ha aperto il menu di condivisione nativo (verifica che la pagina sia aperta via HTTPS e non bloccata). Il testo è stato copiato negli appunti.');
+    });
+    return;
   }
 
   if(navigator.clipboard && navigator.clipboard.writeText){
-    try{await navigator.clipboard.writeText(postText);}catch{}
+    navigator.clipboard.writeText(postText).catch(()=>{});
   }
-  let fbUrl=`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href.startsWith('http')?location.href:'https://www.facebook.com')}&quote=${encodeURIComponent(postText)}`;
-  window.open(fbUrl,'_blank','noopener,noreferrer');
+  alert('Condivisione nativa non supportata in questo browser: il testo è stato copiato negli appunti.');
 }
 
 async function delItem(id){if(!confirm('Eliminare questo articolo?'))return;D=D.filter(x=>x.id!=id);await saveDB();render();}
