@@ -152,7 +152,7 @@
   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
     <div>
       <h1 style="margin:0;font-size:20px">L'APP - TINO</h1>
-      <div style="margin-top:2px;font-size:11px;color:#22c55e">Memoria illimitata • Vocali & POS</div>
+      <div style="margin-top:2px;font-size:11px;color:#22c55e">Memoria illimitata • ZIP + Backup Nuovi Auto</div>
     </div>
     <div style="background:#1a1d27;border:1px solid #333;border-radius:12px;padding:6px 10px;text-align:right">
       <span style="font-size:10px;color:#9aa3b2;display:block">SCATOLE TOTALI</span>
@@ -170,7 +170,7 @@
   <div id="funcDrawer" class="funcDrawer hidden">
     <div class="funcGrid">
       <button class="g top-small" onclick="openChunkBackup()">BACKUP BLOCCHI</button>
-      <button class="b top-small" onclick="exportAllZIPSmart()">ZIP NUOVI</button>
+      <button class="b top-small" onclick="exportAllZIPSmart()">ZIP NUOVI (+ JSON)</button>
       <button class="d top-small" onclick="document.getElementById('restoreFile').click()">RIPRISTINA MULTIPLO</button>
       <button class="excel top-small" onclick="exportExcel()">EXPORT EXCEL</button>
       <button class="c top-small" style="background:#ec4899;color:#fff" onclick="exportPersZIP()">⭐ ZIP PERSONALE</button>
@@ -255,6 +255,7 @@ async function loadDB(){
         if(o.st==undefined){o.st='mag';need=true;}
         if(o.marketInfo==undefined){o.marketInfo='';need=true;}
         if(o.fbDone==undefined){o.fbDone=false;need=true;}
+        if(o.dirtyBackup==undefined){o.dirtyBackup=true;need=true;}
       });
       updQuota();
       render();
@@ -309,8 +310,9 @@ function updQuota(){
   let totalBytes=D.reduce((acc,o)=>acc+JSON.stringify(o).length,0);
   let mb=(totalBytes/1024/1024).toFixed(2);
   let nonZip=D.filter(x=>!x.zip && x.st=='mag' && !x.personal).length;
+  let dirtyCnt=D.filter(x=>x.dirtyBackup).length;
   let tot=D.filter(x=>x.st=='ven').reduce((s,o)=>s+parseEuro(o.soldPrice),0);
-  document.getElementById('quota').innerHTML=`${mb} MB - ${D.length} ogg - Tot vend: ${tot.toFixed(2)} € - Da scaricare: ${nonZip}`;
+  document.getElementById('quota').innerHTML=`${mb} MB - ${D.length} ogg - Tot vend: ${tot.toFixed(2)} € - Da scaricare: ${nonZip} • Nuovi/Mod backup: ${dirtyCnt}`;
   document.getElementById('totVen').innerHTML=tot>0?`Tot: ${tot.toFixed(2)} €`:'';
   document.getElementById('cMag').textContent=D.filter(x=>x.st=='mag' && !x.zip && !x.personal).length;
   document.getElementById('cAll').textContent=D.filter(x=>x.st=='mag' && !x.personal).length;
@@ -349,29 +351,61 @@ function openChunkBackup(){
   document.getElementById('backupPanel').classList.add('on');
 }
 
-function downloadChunk(index){
-  let start=index*CHUNK_SIZE;
-  let end=Math.min(start+CHUNK_SIZE,D.length);
-  let slice=D.slice(start,end);
-  if(!slice.length)return;
-  let payload={
-    app:'L_APP_TINO',
-    chunkIndex:index+1,
-    totalChunks:Math.ceil(D.length/CHUNK_SIZE),
-    range:`${start+1}-${end}`,
-    count:slice.length,
-    exportedAt:new Date().toISOString(),
-    items:slice
-  };
+function triggerJsonDownload(payload, filename){
   let json=JSON.stringify(payload);
   let blob=new Blob([json],{type:'application/json'});
   let url=URL.createObjectURL(blob);
   let a=document.createElement('a');
   a.href=url;
-  a.download=`BACKUP_TINO_BLOCCO_${index+1}_di_${Math.ceil(D.length/CHUNK_SIZE)}_${start+1}-${end}.json`;
+  a.download=filename;
   document.body.appendChild(a);
   a.click();
-  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},600);
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},700);
+}
+
+function downloadChunk(index){
+  let start=index*CHUNK_SIZE;
+  let end=Math.min(start+CHUNK_SIZE,D.length);
+  let slice=D.slice(start,end);
+  if(!slice.length)return;
+  let totalChunks=Math.ceil(D.length/CHUNK_SIZE);
+  let payload={
+    app:'L_APP_TINO',
+    chunkIndex:index+1,
+    totalChunks:totalChunks,
+    range:`${start+1}-${end}`,
+    count:slice.length,
+    exportedAt:new Date().toISOString(),
+    items:slice
+  };
+  triggerJsonDownload(payload, `BACKUP_TINO_BLOCCO_${index+1}_di_${totalChunks}_${start+1}-${end}.json`);
+}
+
+async function exportDirtyBackupChunks(){
+  let dirtyList=D.filter(x=>x.dirtyBackup);
+  if(!dirtyList.length)return 0;
+  let numChunks=Math.ceil(dirtyList.length/CHUNK_SIZE);
+  let stamp=new Date().toISOString().slice(0,10);
+  for(let i=0;i<numChunks;i++){
+    let start=i*CHUNK_SIZE;
+    let end=Math.min(start+CHUNK_SIZE,dirtyList.length);
+    let slice=dirtyList.slice(start,end);
+    let payload={
+      app:'L_APP_TINO',
+      mode:'NEW_OR_UPDATED_ONLY',
+      chunkIndex:i+1,
+      totalChunks:numChunks,
+      range:`${start+1}-${end}`,
+      count:slice.length,
+      exportedAt:new Date().toISOString(),
+      items:slice
+    };
+    triggerJsonDownload(payload, `BACKUP_NUOVI_TINO_${stamp}_BLOCCO_${i+1}_di_${numChunks}.json`);
+    await new Promise(r=>setTimeout(r,450));
+  }
+  dirtyList.forEach(x=>{x.dirtyBackup=false;});
+  await saveDB();
+  return dirtyList.length;
 }
 
 async function doRestoreFile(input){
@@ -391,7 +425,11 @@ async function doRestoreFile(input){
       else if(p && Array.isArray(p.beni)){items=p.beni;}
       else{throw new Error('Formato JSON non riconosciuto');}
       items.forEach(it=>{
-        if(it && it.id!==undefined){map.set(String(it.id),it);totalImported++;}
+        if(it && it.id!==undefined){
+          let normalized={...it,dirtyBackup:false};
+          map.set(String(it.id),normalized);
+          totalImported++;
+        }
       });
     }catch(err){
       errors.push(`${file.name}: ${err.message}`);
@@ -830,7 +868,8 @@ async function wizSave(){
     shipOther:'',
     soldAt:'',
     shippedAt:'',
-    fbDone:false
+    fbDone:false,
+    dirtyBackup:true
   };
   D.unshift(o);
   await saveDB();
@@ -919,7 +958,8 @@ async function saveItem(){
       marketInfo:document.getElementById('marketInfo').value.trim(),
       prc:document.getElementById('prc').value.trim(),
       no:document.getElementById('no').value.trim(),
-      im:[...curIm]
+      im:[...curIm],
+      dirtyBackup:true
     };
   }
   await saveDB();
@@ -962,6 +1002,7 @@ async function confirmSell(){
     D[idx].shipMethod=SELL_SHIP;
     D[idx].shipOther=document.getElementById('shipOther').value.trim();
     D[idx].soldAt=new Date().toISOString();
+    D[idx].dirtyBackup=true;
   }
   await saveDB();
   closeSellModal();
@@ -982,40 +1023,54 @@ function openShipModal(id){
 function closeShipModal(){document.getElementById('shipModal').classList.remove('on');SHIP_VIEW_ID=null;}
 async function markShipped(){
   let idx=D.findIndex(x=>x.id==SHIP_VIEW_ID);
-  if(idx!==-1){D[idx].st='ven';D[idx].shippedAt=new Date().toISOString();}
+  if(idx!==-1){D[idx].st='ven';D[idx].shippedAt=new Date().toISOString();D[idx].dirtyBackup=true;}
   await saveDB();closeShipModal();render();
 }
 async function cancelShipToMag(){
   let idx=D.findIndex(x=>x.id==SHIP_VIEW_ID);
-  if(idx!==-1){D[idx].st='mag';D[idx].soldPrice='';D[idx].soldPlat='';D[idx].shipMethod='';D[idx].shipOther='';D[idx].soldAt='';}
+  if(idx!==-1){D[idx].st='mag';D[idx].soldPrice='';D[idx].soldPlat='';D[idx].shipMethod='';D[idx].shipOther='';D[idx].soldAt='';D[idx].dirtyBackup=true;}
   await saveDB();closeShipModal();render();
 }
 
-async function togglePers(id){let o=D.find(x=>x.id==id);if(o){o.personal=!o.personal;await saveDB();render();}}
-async function toggleFb(id){let o=D.find(x=>x.id==id);if(o){o.fbDone=!o.fbDone;await saveDB();render();}}
+async function togglePers(id){let o=D.find(x=>x.id==id);if(o){o.personal=!o.personal;o.dirtyBackup=true;await saveDB();render();}}
+async function toggleFb(id){let o=D.find(x=>x.id==id);if(o){o.fbDone=!o.fbDone;o.dirtyBackup=true;await saveDB();render();}}
 async function delItem(id){if(!confirm('Eliminare questo articolo?'))return;D=D.filter(x=>x.id!=id);await saveDB();render();}
 
 async function exportAllZIPSmart(){
   if(typeof JSZip==='undefined'){alert('Libreria ZIP non caricata');return;}
   let list=D.filter(x=>!x.zip && x.st=='mag' && !x.personal);
-  if(!list.length){alert('Nessun articolo nuovo da scaricare');return;}
-  let zip=new JSZip();
-  list.forEach(o=>{
-    let cleanBody=cleanFbPromo(o.de||'');
-    let cleanDesc=FB_PROMO_TEXT+(cleanBody?'\n\n'+cleanBody:'');
-    let folder=zip.folder(`${o.id}_${(o.n||'articolo').replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,30)}`);
-    folder.file('info.txt',`Nome: ${o.n}\nScatola: ${o.sc}\nPrezzo: ${o.prc}\nDescrizione:\n${cleanDesc}`);
-    (o.im||[]).forEach((b64,i)=>{
-      let base64=b64.split(',')[1];
-      if(base64)folder.file(`foto_${i+1}.jpg`,base64,{base64:true});
+  let zipCreated=false;
+
+  if(list.length){
+    let zip=new JSZip();
+    list.forEach(o=>{
+      let cleanBody=cleanFbPromo(o.de||'');
+      let cleanDesc=FB_PROMO_TEXT+(cleanBody?'\n\n'+cleanBody:'');
+      let folder=zip.folder(`${o.id}_${(o.n||'articolo').replace(/[^a-zA-Z0-9_-]/g,'_').slice(0,30)}`);
+      folder.file('info.txt',`Nome: ${o.n}\nScatola: ${o.sc}\nPrezzo: ${o.prc}\nDescrizione:\n${cleanDesc}`);
+      (o.im||[]).forEach((b64,i)=>{
+        let base64=b64.split(',')[1];
+        if(base64)folder.file(`foto_${i+1}.jpg`,base64,{base64:true});
+      });
+      o.zip=true;
     });
-    o.zip=true;
-  });
-  let blob=await zip.generateAsync({type:'blob'});
-  let url=URL.createObjectURL(blob);
-  let a=document.createElement('a');a.href=url;a.download=`ZIP_NUOVI_${new Date().toISOString().slice(0,10)}.zip`;
-  document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},600);
-  await saveDB();render();
+    let blob=await zip.generateAsync({type:'blob'});
+    let url=URL.createObjectURL(blob);
+    let a=document.createElement('a');a.href=url;a.download=`ZIP_NUOVI_${new Date().toISOString().slice(0,10)}.zip`;
+    document.body.appendChild(a);a.click();setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},600);
+    await saveDB();
+    zipCreated=true;
+    await new Promise(r=>setTimeout(r,600));
+  }
+
+  let backedCount=await exportDirtyBackupChunks();
+  render();
+
+  if(!zipCreated && !backedCount){
+    alert('Nessun articolo nuovo da mettere in ZIP o in backup JSON.');
+  }else{
+    alert(`Completato: ${zipCreated?`ZIP creato per ${list.length} articoli. `:''}${backedCount?`Scaricati blocchi JSON di backup per ${backedCount} articoli nuovi/modificati.`:'Nessun blocco JSON nuovo da scaricare.'}`);
+  }
 }
 
 async function exportPersZIP(){
@@ -1061,6 +1116,7 @@ async function doCompress(){
       });
     }
     o.im=nextIm;
+    o.dirtyBackup=true;
   }
   await saveDB();render();alert('Spazio ottimizzato!');
 }
